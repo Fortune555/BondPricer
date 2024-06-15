@@ -48,8 +48,8 @@ public class BondCalculator {
     	}
  
     //Number of coupons left
-    public long numberOfouponsLeft() {
-    	long numberOfCouponsLeft = numOfDaysBtwn(maturityDate,nextCouponDate)/devisor;
+    public long numberOfCouponsLeft() {
+    	long numberOfCouponsLeft = ChronoUnit.DAYS.between(nextCouponDate,maturityDate)/devisor;
     	return numberOfCouponsLeft;   	
     	}
     
@@ -68,9 +68,9 @@ public class BondCalculator {
     public long daysOfAcruedInterest() {
     	long daysOfAcruedInterest;
 		if(cumEx()==1) {		
-			daysOfAcruedInterest = numOfDaysBtwn(lastCouponDate,SettlementDate());
+			daysOfAcruedInterest = ChronoUnit.DAYS.between(lastCouponDate,SettlementDate());
 			}else {	
-				daysOfAcruedInterest = numOfDaysBtwn(SettlementDate(),nextCouponDate);
+				daysOfAcruedInterest = ChronoUnit.DAYS.between(SettlementDate(),nextCouponDate);
 				}
 		return daysOfAcruedInterest;
     		}
@@ -97,10 +97,10 @@ public class BondCalculator {
     public double tau(){
     	double tau =0;	
 		if(nextCouponDate.isBefore(maturityDate)) {			
-			tau = numOfDaysBtwn(SettlementDate(),nextCouponDate)/numOfDaysBtwn(lastCouponDate,nextCouponDate);			
+			tau = (double) ChronoUnit.DAYS.between(SettlementDate(), nextCouponDate)/ChronoUnit.DAYS.between(lastCouponDate,nextCouponDate);			
 			
-			}else if(nextCouponDate.isEqual(maturityDate)) {
-				tau = numOfDaysBtwn(SettlementDate(),nextCouponDate)/182.5;
+			}else{
+				tau = ChronoUnit.DAYS.between(SettlementDate(),nextCouponDate)/182.5;
 				}
         return tau; 
     }
@@ -124,8 +124,8 @@ public class BondCalculator {
    
    //Get dirty price
     public double getDirtyPrice(){
-    	double midValue = (1-Math.pow(semiAnualDiscountFactor(),numberOfouponsLeft()))/(1-semiAnualDiscountFactor());
-    	double value = firstCouponAmount() + couponAmount()*semiAnualDiscountFactor()*midValue + redemptionAmount*Math.pow(semiAnualDiscountFactor(),numberOfouponsLeft());
+    	double midValue = (1-Math.pow(semiAnualDiscountFactor(),numberOfCouponsLeft()))/(1-semiAnualDiscountFactor());
+    	double value = firstCouponAmount() + couponAmount()*semiAnualDiscountFactor()*midValue + redemptionAmount*Math.pow(semiAnualDiscountFactor(),numberOfCouponsLeft());
     	double allInPrice = periodDiscountFactor()*value;
         return allInPrice;
     }
@@ -135,6 +135,7 @@ public class BondCalculator {
         double cleanPrice = getDirtyPrice()-getAccruedInterest();
         return cleanPrice;
     }
+	
     // Calculate difference between dates
     public long numOfDaysBtwn(LocalDate date1, LocalDate date2){
         //calculates the amount of time between two dates and returns the years
@@ -149,7 +150,5 @@ public class BondCalculator {
         	}
         
     	}
-
-    
     
 }
