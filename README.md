@@ -106,3 +106,148 @@ public class Main {
 ## Dependencies
 
 - Java 8 or higher
+- Sure! Here is a README file for the JUnit test cases for the `BondCalculator` class:
+
+---
+
+# BondCalculator JUnit Test Cases
+
+This project contains JUnit 4 test cases for the `BondCalculator` class, which is used to perform various bond calculations including settlement date, book close date, number of coupons left, accrued interest, and prices.
+
+## Prerequisites
+
+- Java Development Kit (JDK) 8 or higher
+- Eclipse IDE
+- JUnit 4 library
+
+## Setup
+
+### Adding JUnit 4 to Your Project in Eclipse
+
+1. **Download JUnit 4 JAR**:
+   - Download the JUnit 4 JAR file from the [JUnit website](https://junit.org/junit4/).
+
+2. **Add the JAR to Your Project**:
+   - Copy the JAR file to your project's `lib` directory.
+   - Right-click your project in Eclipse, select `Build Path > Configure Build Path`.
+   - Go to the `Libraries` tab and click `Add JARs...`.
+   - Navigate to the `lib` directory, select the JUnit JAR, and click `OK`.
+
+## Running the Tests
+
+1. **Clone the repository** (if applicable) or download the source code.
+2. **Open the project in Eclipse**.
+3. **Ensure JUnit 4 is added to your project's build path** as described above.
+4. **Create the test class**:
+
+   - Create a new class named `BondTest` in your `src` directory.
+   - Add the following test methods to `BondTest`.
+
+### Test Class: `BondTest`
+
+```java
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.time.LocalDate;
+
+import org.junit.Before;
+import org.junit.Test;
+
+public class BondTest {
+
+    private BondCalculator bondCalculator;
+
+    @Before
+    public void setUp() {
+        bondCalculator = new BondCalculator(
+            "2024-06-14", 
+            LocalDate.of(2024, 3, 14), 
+            LocalDate.of(2024, 9, 14), 
+            LocalDate.of(2025, 9, 14), 
+            0.05, 
+            0.03
+        );
+    }
+
+    @Test
+    public void testSettlementDate() {
+        LocalDate expectedDate = LocalDate.of(2024, 6, 17); // 3 days after valuation date
+        assertEquals(expectedDate, bondCalculator.SettlementDate());
+    }
+
+    @Test
+    public void testBookCloseDate() {
+        LocalDate expectedDate = LocalDate.of(2024, 9, 4); // 10 days before next coupon date
+        assertEquals(expectedDate, bondCalculator.bookCloseDate());
+    }
+
+    @Test
+    public void testNumberOfCouponsLeft() {
+        long expectedCouponsLeft = (ChronoUnit.DAYS.between(LocalDate.of(2025, 9, 14), LocalDate.of(2024, 9, 14))) / (365 / 2);
+        assertEquals(expectedCouponsLeft, bondCalculator.numberOfouponsLeft());
+    }
+
+    @Test
+    public void testCumEx() {
+        int expectedCumEx = 1; // Settlement date is before book close date
+        assertEquals(expectedCumEx, bondCalculator.cumEx());
+    }
+
+    @Test
+    public void testDaysOfAccruedInterest() {
+        long expectedDays = ChronoUnit.DAYS.between(LocalDate.of(2024, 3, 14), bondCalculator.SettlementDate());
+        assertEquals(expectedDays, bondCalculator.daysOfAcruedInterest());
+    }
+
+    @Test
+    public void testCouponAmount() {
+        double expectedCouponAmount = 100 * 0.05 / 2;
+        assertEquals(expectedCouponAmount, bondCalculator.couponAmount(), 0.0001);
+    }
+
+    @Test
+    public void testFirstCouponAmount() {
+        double expectedFirstCouponAmount = bondCalculator.cumEx() * bondCalculator.couponAmount();
+        assertEquals(expectedFirstCouponAmount, bondCalculator.firstCouponAmount(), 0.0001);
+    }
+
+    @Test
+    public void testGetAccruedInterest() {
+        double expectedAccruedInterest = 100 * 0.05 * bondCalculator.daysOfAcruedInterest() / 365;
+        assertEquals(expectedAccruedInterest, bondCalculator.getAccruedInterest(), 0.0001);
+    }
+
+    @Test
+    public void testGetDirtyPrice() {
+        double dirtyPrice = bondCalculator.getDirtyPrice();
+        assertTrue(dirtyPrice > 0); // Check if the dirty price is calculated correctly
+    }
+
+    @Test
+    public void testGetCleanPrice() {
+        double cleanPrice = bondCalculator.getCleanPrice();
+        assertTrue(cleanPrice > 0); // Check if the clean price is calculated correctly
+    }
+}
+```
+
+### Running the Tests in Eclipse
+
+1. **Right-click on the `BondTest` class** in the Project Explorer.
+2. Select `Run As > JUnit Test`.
+3. The JUnit view will display the results of the tests.
+
+## Test Cases Overview
+
+1. **`testSettlementDate`**: Verifies the settlement date calculation.
+2. **`testBookCloseDate`**: Verifies the book close date calculation.
+3. **`testNumberOfCouponsLeft`**: Verifies the number of coupons left calculation.
+4. **`testCumEx`**: Verifies if the bond buyer has the right to the next coupon.
+5. **`testDaysOfAccruedInterest`**: Verifies the number of days that interest is accrued.
+6. **`testCouponAmount`**: Verifies the coupon amount calculation.
+7. **`testFirstCouponAmount`**: Verifies the first coupon amount calculation.
+8. **`testGetAccruedInterest`**: Verifies the accrued interest calculation.
+9. **`testGetDirtyPrice`**: Verifies the dirty price calculation.
+10. **`testGetCleanPrice`**: Verifies the clean price calculation.
+
