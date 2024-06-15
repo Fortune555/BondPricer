@@ -1,5 +1,111 @@
-# BondPricer
-## Overview
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+# BondObject Program
+
+This Java program calculates bond prices using the `BondCalculator` class. The program prompts the user to enter various bond-related dates and rates, computes the settlement date, dirty price, accrued interest, and clean price, and then displays these values.
+
+## Prerequisites
+
+- Java Development Kit (JDK) 8 or higher
+
+## Setup and Execution
+
+1. **Clone the repository** (if applicable) or download the source code.
+2. **Compile the code** using the Java compiler:
+   ```sh
+   javac BondObject.java BondCalculator.java
+   ```
+3. **Run the program**:
+   ```sh
+   java BondObject
+   ```
+
+## Program Details
+
+### User Inputs
+
+The program prompts the user for the following inputs:
+
+1. **Valuation Date**: The date on which the bond valuation is done (format: `YYYY-MM-DD`).
+2. **Last Recent Coupon Date**: The most recent date on which a coupon was paid (format: `YYYY-MM-DD`).
+3. **Next Coupon Date**: The next date on which a coupon will be paid (format: `YYYY-MM-DD`).
+4. **Maturity Date**: The date on which the bond will mature (format: `YYYY-MM-DD`).
+5. **Coupon Rate**: The annual coupon rate of the bond.
+6. **Yield to Maturity**: The yield to maturity (YTM) of the bond as a NACS rate.
+
+### Example Inputs
+
+For testing purposes, the program includes the following example inputs:
+
+- Valuation Date: `2024-06-07`
+- Last Recent Coupon Date: `2023-12-21`
+- Next Coupon Date: `2024-06-21`
+- Maturity Date: `2026-12-21`
+- Coupon Rate: `0.105` (10.5%)
+- Yield to Maturity: `0.0875` (8.75%)
+
+### Calculations
+
+The program performs the following calculations using the `BondCalculator` class:
+
+1. **Settlement Date**: The date on which the bond transaction settles (three days after the valuation date).
+2. **Dirty Price**: The total price of the bond including accrued interest.
+3. **Accrued Interest**: The interest that has accumulated since the last coupon payment.
+4. **Clean Price**: The price of the bond excluding accrued interest.
+
+### Output
+
+The program outputs the following values:
+
+1. **Dirty Price**
+2. **Accrued Interest**
+3. **Clean Price**
+
+### Code Explanation
+
+- The `BondObject` class is the main class that handles user input and calls methods from the `BondCalculator` class to perform calculations.
+- The `BondCalculator` class (not provided here, but assumed to be implemented as described) contains methods for calculating the settlement date, dirty price, accrued interest, and clean price.
+
+```java
+import java.util.Scanner;
+import java.time.LocalDate;  
+
+public class BondObject {
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+
+        System.out.println("Enter valuation date in YYYY-MM-DD format: ");
+        String valdate = "2024-06-07";
+
+        System.out.println("Enter last recent coupon date in YYYY-MM-DD format: ");
+        String lastCpnDate = "2023-12-21";
+        LocalDate lastCpnDate0 = LocalDate.parse(lastCpnDate);
+
+        System.out.println("Enter next coupon date in YYYY-MM-DD format: ");
+        String nxtCpnDate = "2024-06-21";
+        LocalDate nxtCpnDate0 = LocalDate.parse(nxtCpnDate);
+
+        System.out.println("Enter maturity date in YYYY-MM-DD format: ");
+        String matDate = "2026-12-21";
+        LocalDate matDate0 = LocalDate.parse(matDate);
+
+        System.out.println("Enter coupon rate: ");
+        double couponRate = 0.105;
+
+        System.out.println("Enter yield to maturity as a NACS rate: ");
+        double ytm = 0.0875;
+
+        input.close();
+
+        BondCalculator getBondPrices = new BondCalculator(valdate, lastCpnDate0, nxtCpnDate0, matDate0, couponRate, ytm);
+
+        System.out.println("Dirty price: " + getBondPrices.getDirtyPrice());
+        System.out.println("Accrued interest: " + getBondPrices.getAccruedInterest());
+        System.out.println("Clean price: " + getBondPrices.getCleanPrice());
+    }
+}
+```
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## Overview of BondCalculator class
 
 The `BondCalculator` class is designed to calculate various financial metrics related to bonds, such as the settlement date, book close date, number of coupons left, accrued interest, and bond pricing. This class uses `LocalDate` for date manipulations and provides methods for calculating important bond-related values.
 
@@ -102,14 +208,7 @@ public class Main {
     }
 }
 ```
-
-## Dependencies
-
-- Java 8 or higher
-- Sure! Here is a README file for the JUnit test cases for the `BondCalculator` class:
-
----
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------
 # BondCalculator JUnit Test Cases
 
 This project contains JUnit 4 test cases for the `BondCalculator` class, which is used to perform various bond calculations including settlement date, book close date, number of coupons left, accrued interest, and prices.
