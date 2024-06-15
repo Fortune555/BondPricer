@@ -37,8 +37,8 @@ public class BondTest {
 
     @Test
     public void testNumberOfCouponsLeft() {
-        long expectedCouponsLeft = (ChronoUnit.DAYS.between(LocalDate.of(2025, 9, 14), LocalDate.of(2024, 9, 14))) / (365 / 2);
-        assertEquals(expectedCouponsLeft, bondCalculator.numberOfouponsLeft());
+        long expectedCouponsLeft = (ChronoUnit.DAYS.between(LocalDate.of(2024, 9, 14),LocalDate.of(2025, 9, 14))) / (365 / 2);
+        assertEquals(expectedCouponsLeft, bondCalculator.numberOfCouponsLeft());
     }
 
     @Test
